@@ -62,12 +62,12 @@ class TicTacToe {
   bool checkWin() {
     for (int i = 0; i < gameBoardType.size; i++) {
       for (int j = 0; j < gameBoardType.size; j++) {
-        if (_checkWin(
-            1, 0, gameBoardType.size == 3 ? 3 : 4, i, j, gameBoardType)) {
+        if (gameBoard[i][j] == 1 &&
+            _checkWin(1, gameBoardType.size == 3 ? 3 : 4, i, j)) {
           gameWinner = TurnOf.player1;
           return true;
-        } else if (_checkWin(
-            -1, 0, gameBoardType.size == 3 ? 3 : 4, i, j, gameBoardType)) {
+        } else if (gameBoard[i][j] == -1 &&
+            _checkWin(-1, gameBoardType.size == 3 ? 3 : 4, i, j)) {
           gameWinner = TurnOf.player2;
           return true;
         }
@@ -76,60 +76,37 @@ class TicTacToe {
     return false;
   }
 
-  bool _checkWin(int findValue, int valuesFound, int winSize, int row,
-      int column, GameBoardType type,
-      {int directionCoordinateOne = 0, int directionCoordinateTwo = 0}) {
-    /// If we find enough in a line, win
-    if (valuesFound == winSize) return true;
+  bool _checkWin(
+      int findValue, int winSize, int row, int column) {
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        /// Avoid the same square
+        if (i == 0 && j == 0) {
+          continue;
+        }
 
-    /// Increment values found or return false since the line is broken
-    if (gameBoard[row][column] == findValue) {
-      valuesFound++;
-    } else {
-      return false;
-    }
+        var count = 0;
+        bool run = true;
+        var loopRow = row;
+        var loopColumn = column;
 
-    /// If the first value is found, recursively find values on squares around it
-    if (valuesFound == 1) {
-      /// Go for all squares around it except the same square
-      for (int i = -1; i < 2; i++) {
-        for (int j = -1; j < 2; j++) {
-          /// Avoid the same square
-          if (i == 0 && j == 0) {
-            continue;
-          }
-
-          /// If row and column aren't out of bounds, then go recursively to squares around
-          if ((row + i < type.size && row + i >= 0) &&
-              (column + j < type.size && column + j >= 0)) {
-            if (gameBoard[row + i][column + j] == findValue) {
-              _checkWin(
-                findValue,
-                valuesFound,
-                winSize,
-                row + i,
-                column + j,
-                type,
-                directionCoordinateOne: i,
-                directionCoordinateTwo: j,
-              );
-            }
+        while (run) {
+          if (loopRow < gameBoardType.size &&
+              loopRow >= 0 &&
+              loopColumn < gameBoardType.size &&
+              loopColumn >= 0 &&
+              gameBoard[loopRow][loopColumn] == findValue) {
+            count++;
+            loopRow += i;
+            loopColumn += j;
+          } else {
+            run = false;
           }
         }
-      }
-    } else {
-      if ((row + directionCoordinateOne < type.size && row + directionCoordinateOne >= 0) &&
-          (column + directionCoordinateTwo < type.size && column + directionCoordinateTwo >= 0)) {
-        _checkWin(
-          findValue,
-          valuesFound,
-          winSize,
-          row + directionCoordinateOne,
-          column + directionCoordinateTwo,
-          type,
-          directionCoordinateOne: directionCoordinateOne,
-          directionCoordinateTwo: directionCoordinateTwo,
-        );
+
+        if(count == winSize) {
+          return true;
+        }
       }
     }
 
