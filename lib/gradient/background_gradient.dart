@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:power_tic_tac_toe/game/game_elements.dart';
+import 'package:power_tic_tac_toe/game_ui/components/game_elements.dart';
 import 'package:power_tic_tac_toe/gradient/particle.dart';
 import 'package:power_tic_tac_toe/gradient/constants.dart';
 import 'package:power_tic_tac_toe/utils/extensions.dart';
