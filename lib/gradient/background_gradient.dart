@@ -1,7 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:power_tic_tac_toe/game/game_elements.dart';
+import 'package:power_tic_tac_toe/gradient/particle.dart';
 import 'package:power_tic_tac_toe/gradient/constants.dart';
+import 'package:power_tic_tac_toe/utils/extensions.dart';
 
 class BackgroundGradient extends StatefulWidget {
   @override
@@ -17,6 +20,8 @@ class _BackgroundGradientState extends State<BackgroundGradient>
   AlignmentGeometry begin = Alignment.topLeft;
   AlignmentGeometry end = Alignment.bottomRight;
 
+  List<Particle> particles = [];
+
   @override
   void initState() {
     super.initState();
@@ -24,7 +29,7 @@ class _BackgroundGradientState extends State<BackgroundGradient>
         AnimationController(vsync: this, duration: Duration(seconds: 10));
     _animationController.repeat(reverse: true);
     _gradient = gradients[Random().nextInt(gradients.length)];
-    _gradientMovementAnim = Tween(begin: 0.0, end: 0.4).animate(
+    _gradientMovementAnim = Tween(begin: 0.0, end: 0.45).animate(
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
   }
 
@@ -33,6 +38,10 @@ class _BackgroundGradientState extends State<BackgroundGradient>
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, snapshot) {
+        particles.forEach(
+            (e) => e.updateVelocities(MediaQuery.of(context).size.offset));
+        particles.forEach((e) => e.updatePosition());
+
         return Stack(
           children: [
             Container(
@@ -48,10 +57,54 @@ class _BackgroundGradientState extends State<BackgroundGradient>
                 ),
               ),
             ),
+            ...particles.map((e) => e.build()),
           ],
         );
       },
     );
+  }
+
+  void generateParticles() {
+    var size = MediaQuery.of(context).size;
+
+    particles = List.generate(
+      7,
+      (index) {
+        var randomOffsetX = Random().nextInt(size.width.toInt());
+        var randomOffsetY = Random().nextInt(size.height.toInt());
+
+        return Particle(
+          position: Offset(randomOffsetX.toDouble(), randomOffsetY.toDouble()),
+          child: GameX(
+            elementColor: Colors.white.withOpacity(0.6),
+            thickness: 3.0,
+          ),
+        );
+      },
+    );
+
+    particles.addAll(List.generate(
+      7,
+      (index) {
+        var randomOffsetX = Random().nextInt(size.width.toInt());
+        var randomOffsetY = Random().nextInt(size.height.toInt());
+
+        return Particle(
+          position: Offset(randomOffsetX.toDouble(), randomOffsetY.toDouble()),
+          child: GameO(
+            elementColor: Colors.white.withOpacity(0.6),
+          ),
+        );
+      },
+    ));
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (particles.isEmpty) {
+      generateParticles();
+    }
   }
 
   @override

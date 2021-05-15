@@ -72,11 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       body: Center(
-        child: Container(
-          height: 50.0,
-          width: 50.0,
-          child: GameO(),
-        ),
+        child: BackgroundGradient(),
       ),
     );
   }
