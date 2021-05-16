@@ -17,8 +17,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Power Tic-Tac-Toe',
       theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: GoogleFonts.aBeeZeeTextTheme()),
+        primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.aBeeZeeTextTheme(),
+      ),
       home: HomeScreen(),
     );
   }

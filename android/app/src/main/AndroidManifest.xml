@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="dev.joshi.power_tic_tac_toe">
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
    <application
         android:label="Tic Tac Toe"
         android:icon="@mipmap/ic_launcher">

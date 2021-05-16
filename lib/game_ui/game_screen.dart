@@ -40,26 +40,30 @@ class _GameScreenState extends State<GameScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment:
+                    widget.gamePlayerType == GamePlayerType.twoPlayer
+                        ? MainAxisAlignment.spaceBetween
+                        : MainAxisAlignment.end,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: OutlinedButton(
-                      onPressed: () {
-                        setState(() {
-                          enablePowers = !enablePowers;
-                        });
-                      },
-                      style: ButtonStyle(),
-                      child: Text(
-                        'Powers: ${enablePowers ? 'On' : 'Off'}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22.0,
+                  if (widget.gamePlayerType == GamePlayerType.twoPlayer)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            enablePowers = !enablePowers;
+                          });
+                        },
+                        style: ButtonStyle(),
+                        child: Text(
+                          'Powers: ${enablePowers ? 'On' : 'Off'}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22.0,
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0),
                     child: Text(
