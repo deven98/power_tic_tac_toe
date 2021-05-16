@@ -22,6 +22,13 @@ class TicTacToe {
   }) : gameBoard = List.generate(gameBoardType.size,
             (index) => List.generate(gameBoardType.size, (index) => 0));
 
+  TicTacToe.copy({
+    required TicTacToe game,
+    this.onMove,
+    required this.playerToPlay,
+  })   : gameBoard = game.gameBoard.map((e) => e.toList()).toList(),
+        gameBoardType = game.gameBoardType;
+
   bool makeMove(int row, int column) {
     if (gameBoard[row][column] == 0) {
       gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
