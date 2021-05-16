@@ -110,72 +110,92 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildGameTypeScreen() {
     return Center(
       key: Key('screen-two'),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: Stack(
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'Power',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 42.0,
-                    fontWeight: FontWeight.bold),
+              Column(
+                children: [
+                  Text(
+                    'Power',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 42.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Tic Tac Toe',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.w300),
+                  ),
+                ],
               ),
-              Text(
-                'Tic Tac Toe',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.w300),
+              Column(
+                children: [
+                  GameButton(
+                    text: '3x3',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GameScreen(
+                            gameBoardType: GameBoardType.threeByThree,
+                            gamePlayerType: playerType,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  GameButton(
+                    text: '5x5',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GameScreen(
+                            gameBoardType: GameBoardType.fiveByFive,
+                            gamePlayerType: playerType,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  GameButton(
+                    text: '7x7',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GameScreen(
+                            gameBoardType: GameBoardType.sevenBySeven,
+                            gamePlayerType: playerType,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-          Column(
-            children: [
-              GameButton(
-                text: '3x3',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameScreen(
-                        gameBoardType: GameBoardType.threeByThree,
-                        gamePlayerType: playerType,
-                      ),
-                    ),
-                  );
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back_ios_outlined,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    screenType = ScreenType.player;
+                  });
                 },
               ),
-              GameButton(
-                text: '5x5',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameScreen(
-                        gameBoardType: GameBoardType.fiveByFive,
-                        gamePlayerType: playerType,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              GameButton(
-                text: '7x7',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameScreen(
-                        gameBoardType: GameBoardType.sevenBySeven,
-                        gamePlayerType: playerType,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
+            ),
           ),
         ],
       ),

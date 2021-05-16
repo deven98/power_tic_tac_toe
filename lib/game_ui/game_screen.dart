@@ -43,9 +43,10 @@ class _GameScreenState extends State<GameScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Text(
-                    widget.gamePlayerType == GamePlayerType.twoPlayer
-                        ? 'Player 2'
-                        : 'Computer',
+                    (widget.gamePlayerType == GamePlayerType.twoPlayer
+                            ? 'Player 2'
+                            : 'Computer') +
+                        '${game.gameWinner == TurnOf.player2 ? ' Wins' : ''}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22.0,
@@ -58,35 +59,62 @@ class _GameScreenState extends State<GameScreen> {
                 child: GameBoard(
                   game: game,
                   gameBoardType: widget.gameBoardType,
+                  gamePlayerType: widget.gamePlayerType,
                   elementColor: Colors.white.withOpacity(0.8),
                   thickness: 4.0,
+                  onResult: () {
+                    setState(() {});
+                  },
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Text(
-                    'Player 1',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: Text(
+                      'Player 1' +
+                          '${game.gameWinner == TurnOf.player1 ? ' Wins' : ''}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.0,
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          game.resetBoard();
+                        });
+                      },
+                      style: ButtonStyle(),
+                      child: Text(
+                        'Reset',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22.0,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ],
           ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: Icon(
-                Icons.cancel,
-                color: Colors.white,
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: Icon(
+                  Icons.cancel,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
           ),
         ],

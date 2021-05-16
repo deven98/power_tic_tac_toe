@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:power_tic_tac_toe/game/game_computer.dart';
 import 'package:power_tic_tac_toe/game/tic_tac_toe.dart';
 import 'package:power_tic_tac_toe/utils/constants.dart';
 
@@ -10,13 +11,17 @@ class GameBoard extends StatefulWidget {
   final Color elementColor;
   final double thickness;
   final GameBoardType gameBoardType;
+  final GamePlayerType gamePlayerType;
   final TicTacToe game;
+  final VoidCallback onResult;
 
   GameBoard({
     this.elementColor = Colors.black,
     this.thickness = 0.5,
     this.gameBoardType = GameBoardType.threeByThree,
+    this.gamePlayerType = GamePlayerType.twoPlayer,
     required this.game,
+    required this.onResult,
   });
 
   @override
@@ -29,6 +34,15 @@ class _GameBoardState extends State<GameBoard> {
     super.initState();
     widget.game.onMove = () {
       setState(() {});
+
+      if (widget.game.isWin() || widget.game.isDraw()) {
+        widget.onResult();
+      } else {
+        if (widget.gamePlayerType == GamePlayerType.onePlayer &&
+            widget.game.playerToPlay == TurnOf.player2) {
+          GameComputer.makeMove(widget.game);
+        }
+      }
     };
   }
 
@@ -91,7 +105,7 @@ class _GameBoardState extends State<GameBoard> {
                     winningSquares: widget.game.winningSquares!,
                     gameBoardType: widget.gameBoardType,
                     progress: val,
-                    thickness: 3.0,
+                    thickness: 4.0,
                     color: Colors.white,
                   ),
                 );
@@ -118,6 +132,10 @@ class _GameBoardState extends State<GameBoard> {
           child: SizedBox.expand(),
           onTap: () {
             if (!widget.game.isWin() && !widget.game.isDraw()) {
+              if (widget.gamePlayerType == GamePlayerType.onePlayer &&
+                  widget.game.playerToPlay == TurnOf.player2) {
+                return;
+              }
               widget.game.makeMove(row, column);
             }
           },
@@ -208,7 +226,9 @@ class WinPainter extends CustomPainter {
     var endPosition = Offset(blockSize * end[1], blockSize * end[0]) +
         Offset(blockSize / 2, blockSize / 2);
 
-    canvas.drawLine(startPosition, endPosition * progress, paint);
+    var diff = endPosition - startPosition;
+
+    canvas.drawLine(startPosition, startPosition + (diff * progress), paint);
   }
 
   @override

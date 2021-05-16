@@ -59,6 +59,8 @@ class TicTacToe {
     gameBoard = List.generate(gameBoardType.size,
         (index) => List.generate(gameBoardType.size, (index) => 0));
     playerToPlay = TurnOf.player1;
+    gameWinner = null;
+    winningSquares = null;
   }
 
   void changeTurn() {
@@ -109,7 +111,7 @@ class TicTacToe {
           var res = _checkWin(-1, gameBoardType.size == 3 ? 3 : 4, i, j);
 
           if (res != null) {
-            gameWinner = TurnOf.player1;
+            gameWinner = TurnOf.player2;
             winningSquares = res;
             return true;
           }
@@ -164,6 +166,20 @@ class TicTacToe {
       0,
       (previousValue, element) =>
           previousValue + element.where((e) => e != 0).length);
+
+  List<List<int>> get possibleMoves {
+    List<List<int>> moves = [];
+
+    for (int i = 0; i < gameBoardType.size; i++) {
+      for (int j = 0; j < gameBoardType.size; j++) {
+        if (gameBoard[i][j] == 0) {
+          moves.add([i, j]);
+        }
+      }
+    }
+
+    return moves;
+  }
 }
 
 extension on GameBoardType {
