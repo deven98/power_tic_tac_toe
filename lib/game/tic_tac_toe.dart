@@ -15,10 +15,12 @@ class TicTacToe {
   TurnOf? gameWinner;
   List<List<int>>? winningSquares;
   VoidCallback? onMove;
+  VoidCallback? onReset;
 
   TicTacToe({
     required this.gameBoardType,
     this.onMove,
+    this.onReset,
   }) : gameBoard = List.generate(gameBoardType.size,
             (index) => List.generate(gameBoardType.size, (index) => 0));
 
@@ -68,6 +70,7 @@ class TicTacToe {
     playerToPlay = TurnOf.player1;
     gameWinner = null;
     winningSquares = null;
+    onReset?.call();
   }
 
   void changeTurn() {

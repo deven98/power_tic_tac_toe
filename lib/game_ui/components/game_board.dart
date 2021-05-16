@@ -99,6 +99,10 @@ class _GameBoardState extends State<GameBoard> {
         default:
           break;
       }
+    } else {
+      setState(() {
+        powerType = null;
+      });
     }
   }
 
@@ -114,10 +118,12 @@ class _GameBoardState extends State<GameBoard> {
         if (widget.gamePlayerType == GamePlayerType.onePlayer &&
             widget.game.playerToPlay == TurnOf.player2) {
           GameComputer.makeMove(widget.game);
-        } else if (widget.enablePowers &&
+        } else if (widget.gamePlayerType == GamePlayerType.twoPlayer &&
+            widget.enablePowers &&
             widget.gamePlayerType == GamePlayerType.twoPlayer &&
-            widget.game.moves > 2) {
-          var number = Random().nextInt(10);
+            widget.game.moves > 2 &&
+            widget.game.possibleMoves.length >= 1) {
+          var number = Random().nextInt(14);
           var givePower = number < 2;
 
           if (givePower) {
@@ -131,6 +137,12 @@ class _GameBoardState extends State<GameBoard> {
           }
         }
       }
+    };
+
+    widget.game.onReset = () {
+      setState(() {
+        powerType = null;
+      });
     };
   }
 
@@ -250,7 +262,7 @@ class _GameBoardState extends State<GameBoard> {
         return InkWell(
           child: SizedBox.expand(),
           onTap: () {
-            if (powerType == null) {
+            if (powerType != PowerType.removeMove) {
               if (!widget.game.isWin() && !widget.game.isDraw()) {
                 if (widget.gamePlayerType == GamePlayerType.onePlayer &&
                     widget.game.playerToPlay == TurnOf.player2) {

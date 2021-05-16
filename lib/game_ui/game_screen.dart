@@ -20,7 +20,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   late TicTacToe game;
-  bool enablePowers = true;
+  bool enablePowers = false;
 
   @override
   void initState() {
