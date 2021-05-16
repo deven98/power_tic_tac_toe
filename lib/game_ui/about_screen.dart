@@ -83,6 +83,31 @@ This app is part of an initiative to make free, open-source, ad-free, educationa
               ),
             ),
           ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '''
+To look at source code of the game, go here:
+              ''',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                launch('https://github.com/deven98/power_tic_tac_toe');
+              },
+              child: Text(
+                'Source Code',
+                style: TextStyle(fontSize: 22.0),
+              ),
+            ),
+          ),
         ],
       ),
     );
