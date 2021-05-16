@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:power_tic_tac_toe/game/tic_tac_toe.dart';
 import 'package:power_tic_tac_toe/gradient/background_gradient.dart';
 import 'package:power_tic_tac_toe/utils/constants.dart';
 
@@ -18,6 +19,14 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  late TicTacToe game;
+
+  @override
+  void initState() {
+    super.initState();
+    game = TicTacToe(gameBoardType: widget.gameBoardType);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,13 +55,11 @@ class _GameScreenState extends State<GameScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AspectRatio(
-                  aspectRatio: 1.0,
-                  child: GameBoard(
-                    gameBoardType: widget.gameBoardType,
-                    elementColor: Colors.white.withOpacity(0.8),
-                    thickness: 4.0,
-                  ),
+                child: GameBoard(
+                  game: game,
+                  gameBoardType: widget.gameBoardType,
+                  elementColor: Colors.white.withOpacity(0.8),
+                  thickness: 4.0,
                 ),
               ),
               Align(

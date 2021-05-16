@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:power_tic_tac_toe/utils/constants.dart';
-import 'package:power_tic_tac_toe/utils/extensions.dart';
 
 enum SquareState { playedPlayer1, playedPlayer2, notPlayed }
 
@@ -13,9 +13,12 @@ class TicTacToe {
   late List<List<int>> gameBoard;
   TurnOf playerToPlay = TurnOf.player1;
   TurnOf? gameWinner;
+  List<List<int>>? winningSquares;
+  VoidCallback? onMove;
 
   TicTacToe({
     required this.gameBoardType,
+    this.onMove,
   }) : gameBoard = List.generate(gameBoardType.size,
             (index) => List.generate(gameBoardType.size, (index) => 0));
 
@@ -23,6 +26,8 @@ class TicTacToe {
     if (gameBoard[row][column] == 0) {
       gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
       changeTurn();
+      isWin();
+      onMove?.call();
       return true;
     }
     return false;
@@ -31,6 +36,8 @@ class TicTacToe {
   bool makeMoveWithoutChangingTurn(int row, int column) {
     if (gameBoard[row][column] == 0) {
       gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
+      isWin();
+      onMove?.call();
       return true;
     }
     return false;
@@ -62,6 +69,18 @@ class TicTacToe {
     }
   }
 
+  bool isDraw() {
+    if (isWin()) {
+      return false;
+    }
+
+    if (moves < gameBoardType.size * gameBoardType.size) {
+      return false;
+    }
+
+    return true;
+  }
+
   bool isWin() {
     switch (gameBoardType) {
       case GameBoardType.threeByThree:
@@ -78,21 +97,29 @@ class TicTacToe {
   bool checkWin() {
     for (int i = 0; i < gameBoardType.size; i++) {
       for (int j = 0; j < gameBoardType.size; j++) {
-        if (gameBoard[i][j] == 1 &&
-            _checkWin(1, gameBoardType.size == 3 ? 3 : 4, i, j)) {
-          gameWinner = TurnOf.player1;
-          return true;
-        } else if (gameBoard[i][j] == -1 &&
-            _checkWin(-1, gameBoardType.size == 3 ? 3 : 4, i, j)) {
-          gameWinner = TurnOf.player2;
-          return true;
+        if (gameBoard[i][j] == 1) {
+          var res = _checkWin(1, gameBoardType.size == 3 ? 3 : 4, i, j);
+
+          if (res != null) {
+            gameWinner = TurnOf.player1;
+            winningSquares = res;
+            return true;
+          }
+        } else if (gameBoard[i][j] == -1) {
+          var res = _checkWin(-1, gameBoardType.size == 3 ? 3 : 4, i, j);
+
+          if (res != null) {
+            gameWinner = TurnOf.player1;
+            winningSquares = res;
+            return true;
+          }
         }
       }
     }
     return false;
   }
 
-  bool _checkWin(int findValue, int winSize, int row, int column) {
+  List<List<int>>? _checkWin(int findValue, int winSize, int row, int column) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         /// Avoid the same square
@@ -105,12 +132,17 @@ class TicTacToe {
         var loopRow = row;
         var loopColumn = column;
 
+        List<List<int>> squares = [
+          [row, column]
+        ];
+
         while (run) {
           if (loopRow < gameBoardType.size &&
               loopRow >= 0 &&
               loopColumn < gameBoardType.size &&
               loopColumn >= 0 &&
               gameBoard[loopRow][loopColumn] == findValue) {
+            squares.add([loopRow, loopColumn]);
             count++;
             loopRow += i;
             loopColumn += j;
@@ -120,13 +152,18 @@ class TicTacToe {
         }
 
         if (count == winSize) {
-          return true;
+          return squares;
         }
       }
     }
 
-    return false;
+    return null;
   }
+
+  int get moves => gameBoard.fold(
+      0,
+      (previousValue, element) =>
+          previousValue + element.where((e) => e != 0).length);
 }
 
 extension on GameBoardType {
