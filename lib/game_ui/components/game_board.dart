@@ -7,6 +7,11 @@ import 'package:power_tic_tac_toe/utils/constants.dart';
 
 import 'game_elements.dart';
 
+enum PowerType {
+  removeMove,
+  moveTwice,
+}
+
 class GameBoard extends StatefulWidget {
   final Color elementColor;
   final double thickness;
@@ -14,6 +19,7 @@ class GameBoard extends StatefulWidget {
   final GamePlayerType gamePlayerType;
   final TicTacToe game;
   final VoidCallback onResult;
+  final bool enablePowers;
 
   GameBoard({
     this.elementColor = Colors.black,
@@ -22,6 +28,7 @@ class GameBoard extends StatefulWidget {
     this.gamePlayerType = GamePlayerType.twoPlayer,
     required this.game,
     required this.onResult,
+    required this.enablePowers,
   });
 
   @override
@@ -29,6 +36,72 @@ class GameBoard extends StatefulWidget {
 }
 
 class _GameBoardState extends State<GameBoard> {
+  PowerType? powerType;
+
+  void _showPowerDialog() async {
+    var result = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white.withOpacity(0.85),
+          title: Text(powerType!.getTitle()),
+          content: Text(powerType!.getDescription()),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: OutlinedButton(
+                onPressed: () {
+                  powerType = null;
+                  Navigator.pop(context, false);
+                },
+                style: ButtonStyle(),
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                style: ButtonStyle(),
+                child: Text(
+                  'Use',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                  ),
+                ),
+              ),
+            ),
+          ],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+        );
+      },
+      barrierDismissible: false,
+    );
+
+    if (result) {
+      switch (powerType) {
+        case PowerType.removeMove:
+          powerType = PowerType.removeMove;
+          break;
+        case PowerType.moveTwice:
+          powerType = null;
+          widget.game.changeTurn();
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +114,21 @@ class _GameBoardState extends State<GameBoard> {
         if (widget.gamePlayerType == GamePlayerType.onePlayer &&
             widget.game.playerToPlay == TurnOf.player2) {
           GameComputer.makeMove(widget.game);
+        } else if (widget.enablePowers &&
+            widget.gamePlayerType == GamePlayerType.twoPlayer &&
+            widget.game.moves > 2) {
+          var number = Random().nextInt(10);
+          var givePower = number < 2;
+
+          if (givePower) {
+            if (number == 0) {
+              powerType = PowerType.removeMove;
+            } else {
+              powerType = PowerType.moveTwice;
+            }
+
+            _showPowerDialog();
+          }
         }
       }
     };
@@ -119,10 +207,41 @@ class _GameBoardState extends State<GameBoard> {
   Widget _buildMove(int i, int row, int column) {
     switch (i) {
       case -1:
+        if (powerType == PowerType.removeMove &&
+            widget.game.playerToPlay == TurnOf.player2) {
+          return InkWell(
+            onTap: () {
+              setState(() {
+                widget.game.gameBoard[row][column] = 0;
+                powerType = null;
+              });
+            },
+            child: GameO(
+              elementColor: Colors.white,
+            ),
+          );
+        }
+
         return GameO(
           elementColor: Colors.white,
         );
       case 1:
+        if (powerType == PowerType.removeMove &&
+            widget.game.playerToPlay == TurnOf.player1) {
+          return InkWell(
+            onTap: () {
+              setState(() {
+                widget.game.gameBoard[row][column] = 0;
+                powerType = null;
+              });
+            },
+            child: GameX(
+              elementColor: Colors.white,
+              thickness: 2.0,
+            ),
+          );
+        }
+
         return GameX(
           elementColor: Colors.white,
           thickness: 2.0,
@@ -131,12 +250,14 @@ class _GameBoardState extends State<GameBoard> {
         return InkWell(
           child: SizedBox.expand(),
           onTap: () {
-            if (!widget.game.isWin() && !widget.game.isDraw()) {
-              if (widget.gamePlayerType == GamePlayerType.onePlayer &&
-                  widget.game.playerToPlay == TurnOf.player2) {
-                return;
+            if (powerType == null) {
+              if (!widget.game.isWin() && !widget.game.isDraw()) {
+                if (widget.gamePlayerType == GamePlayerType.onePlayer &&
+                    widget.game.playerToPlay == TurnOf.player2) {
+                  return;
+                }
+                widget.game.makeMove(row, column);
               }
-              widget.game.makeMove(row, column);
             }
           },
         );
@@ -246,6 +367,30 @@ extension on GameBoardType {
         return 5;
       case GameBoardType.sevenBySeven:
         return 7;
+    }
+  }
+}
+
+extension PowerInfo on PowerType {
+  String getTitle() {
+    switch (index) {
+      case 0:
+        return 'Remove Move';
+      case 1:
+        return 'Move Once More';
+      default:
+        return '';
+    }
+  }
+
+  String getDescription() {
+    switch (index) {
+      case 0:
+        return 'Remove a move from the other player';
+      case 1:
+        return 'Move again on the board';
+      default:
+        return '';
     }
   }
 }

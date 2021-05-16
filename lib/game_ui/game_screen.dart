@@ -20,6 +20,7 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   late TicTacToe game;
+  bool enablePowers = true;
 
   @override
   void initState() {
@@ -38,21 +39,41 @@ class _GameScreenState extends State<GameScreen> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Text(
-                    (widget.gamePlayerType == GamePlayerType.twoPlayer
-                            ? 'Player 2'
-                            : 'Computer') +
-                        '${game.gameWinner == TurnOf.player2 ? ' Wins' : ''}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22.0,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          enablePowers = !enablePowers;
+                        });
+                      },
+                      style: ButtonStyle(),
+                      child: Text(
+                        'Powers: ${enablePowers ? 'On' : 'Off'}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22.0,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Text(
+                      (widget.gamePlayerType == GamePlayerType.twoPlayer
+                              ? 'Player 2'
+                              : 'Computer') +
+                          '${game.gameWinner == TurnOf.player2 ? ' Wins' : ''}',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.0,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -65,6 +86,7 @@ class _GameScreenState extends State<GameScreen> {
                   onResult: () {
                     setState(() {});
                   },
+                  enablePowers: enablePowers,
                 ),
               ),
               Row(
@@ -98,7 +120,7 @@ class _GameScreenState extends State<GameScreen> {
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
