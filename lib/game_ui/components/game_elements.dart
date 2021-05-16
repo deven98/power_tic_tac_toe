@@ -38,8 +38,11 @@ class XPainter extends CustomPainter {
   Color color;
   double thickness;
 
-  XPainter(
-      {this.progress = 0, this.color = Colors.black, this.thickness = 0.5});
+  XPainter({
+    this.progress = 0,
+    this.color = Colors.black,
+    this.thickness = 0.5,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -107,8 +110,11 @@ class OPainter extends CustomPainter {
   Color color;
   double thickness;
 
-  OPainter(
-      {this.progress = 0, this.color = Colors.black, this.thickness = 0.5});
+  OPainter({
+    this.progress = 0,
+    this.color = Colors.black,
+    this.thickness = 0.5,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:power_tic_tac_toe/game_ui/about_screen.dart';
+import 'package:power_tic_tac_toe/game_ui/components/game_board.dart';
 import 'package:power_tic_tac_toe/game_ui/components/game_button.dart';
+import 'package:power_tic_tac_toe/game_ui/game_screen.dart';
 import 'package:power_tic_tac_toe/gradient/background_gradient.dart';
 import 'package:power_tic_tac_toe/utils/constants.dart';
 
@@ -133,15 +135,45 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               GameButton(
                 text: '3x3',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameScreen(
+                        gameBoardType: GameBoardType.threeByThree,
+                        gamePlayerType: playerType,
+                      ),
+                    ),
+                  );
+                },
               ),
               GameButton(
                 text: '5x5',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameScreen(
+                        gameBoardType: GameBoardType.fiveByFive,
+                        gamePlayerType: playerType,
+                      ),
+                    ),
+                  );
+                },
               ),
               GameButton(
                 text: '7x7',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GameScreen(
+                        gameBoardType: GameBoardType.sevenBySeven,
+                        gamePlayerType: playerType,
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

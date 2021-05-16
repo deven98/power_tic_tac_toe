@@ -19,13 +19,29 @@ class TicTacToe {
   }) : gameBoard = List.generate(gameBoardType.size,
             (index) => List.generate(gameBoardType.size, (index) => 0));
 
-  void makeMove(int row, int column) {
-    gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
-    changeTurn();
+  bool makeMove(int row, int column) {
+    if (gameBoard[row][column] == 0) {
+      gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
+      changeTurn();
+      return true;
+    }
+    return false;
   }
 
-  void makeMoveWithoutChangingTurn(int row, int column) {
-    gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
+  bool makeMoveWithoutChangingTurn(int row, int column) {
+    if (gameBoard[row][column] == 0) {
+      gameBoard[row][column] = playerToPlay == TurnOf.player1 ? 1 : -1;
+      return true;
+    }
+    return false;
+  }
+
+  bool flipSquare(int row, int column) {
+    if (gameBoard[row][column] != 0) {
+      gameBoard[row][column] = -gameBoard[row][column];
+      return true;
+    }
+    return false;
   }
 
   void resetSquare(int row, int column) {
@@ -76,8 +92,7 @@ class TicTacToe {
     return false;
   }
 
-  bool _checkWin(
-      int findValue, int winSize, int row, int column) {
+  bool _checkWin(int findValue, int winSize, int row, int column) {
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
         /// Avoid the same square
@@ -104,7 +119,7 @@ class TicTacToe {
           }
         }
 
-        if(count == winSize) {
+        if (count == winSize) {
           return true;
         }
       }

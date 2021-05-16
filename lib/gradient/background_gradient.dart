@@ -7,6 +7,10 @@ import 'package:power_tic_tac_toe/gradient/constants.dart';
 import 'package:power_tic_tac_toe/utils/extensions.dart';
 
 class BackgroundGradient extends StatefulWidget {
+  final double bgOpacity;
+
+  const BackgroundGradient({Key? key, this.bgOpacity = 0.6}) : super(key: key);
+
   @override
   _BackgroundGradientState createState() => _BackgroundGradientState();
 }
@@ -76,7 +80,7 @@ class _BackgroundGradientState extends State<BackgroundGradient>
         return Particle(
           position: Offset(randomOffsetX.toDouble(), randomOffsetY.toDouble()),
           child: GameX(
-            elementColor: Colors.white.withOpacity(0.6),
+            elementColor: Colors.white.withOpacity(widget.bgOpacity),
             thickness: 3.0,
           ),
         );
@@ -92,7 +96,7 @@ class _BackgroundGradientState extends State<BackgroundGradient>
         return Particle(
           position: Offset(randomOffsetX.toDouble(), randomOffsetY.toDouble()),
           child: GameO(
-            elementColor: Colors.white.withOpacity(0.6),
+            elementColor: Colors.white.withOpacity(widget.bgOpacity),
           ),
         );
       },
