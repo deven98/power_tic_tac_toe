@@ -16,12 +16,12 @@ Power Tic-Tac-Toe is completely open source. Got a new idea to modify or improve
 
 Free to use. Completely Open-source.
 
-![](https://github.com/deven98/power_tic_tac_toe/blob/master/screenshots/ss_1.jpeg)
+![](https://github.com/deven98/power_tic_tac_toe/raw/master/screenshots/ss_1.jpeg)
 
-![](https://github.com/deven98/power_tic_tac_toe/tree/master/screenshots/ss_2.jpeg)
+![](https://github.com/deven98/power_tic_tac_toe/raw/master/screenshots/ss_2.jpeg)
 
-![](https://github.com/deven98/power_tic_tac_toe/tree/master/screenshots/ss_3.jpeg)
+![](https://github.com/deven98/power_tic_tac_toe/raw/master/screenshots/ss_3.jpeg)
 
-![](https://github.com/deven98/power_tic_tac_toe/tree/master/screenshots/ss_4.jpeg)
+![](https://github.com/deven98/power_tic_tac_toe/raw/master/screenshots/ss_4.jpeg)
 
 (Project code docs are ongoing)
