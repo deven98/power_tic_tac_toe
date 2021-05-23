@@ -19,6 +19,24 @@ class GameComputer {
       return;
     }
 
+    if (game.gameBoardType != GameBoardType.threeByThree) {
+      var res3 = getPossibleThreeMove(game);
+      print(res3);
+
+      if (res3 != null) {
+        game.makeMove(res3[0], res3[1]);
+        return;
+      }
+
+      var res4 = stopPossibleThreeMove(game);
+      print(res4);
+
+      if (res4 != null) {
+        game.makeMove(res4[0], res4[1]);
+        return;
+      }
+    }
+
     makeRandomMove(game);
   }
 
@@ -52,6 +70,42 @@ class GameComputer {
         gameCopy.makeMove(i, j);
 
         if (gameCopy.isWin()) {
+          return [i, j];
+        }
+      }
+    }
+  }
+
+  static List<int>? getPossibleThreeMove(TicTacToe game) {
+    for (int i = 0; i < game.gameBoardType.size; i++) {
+      for (int j = 0; j < game.gameBoardType.size; j++) {
+        if (game.gameBoard[i][j] != 0) {
+          continue;
+        }
+
+        var gameCopy = TicTacToe.copy(game: game, playerToPlay: TurnOf.player2);
+
+        gameCopy.makeMove(i, j);
+
+        if (gameCopy.isThreeMove()) {
+          return [i, j];
+        }
+      }
+    }
+  }
+
+  static List<int>? stopPossibleThreeMove(TicTacToe game) {
+    for (int i = 0; i < game.gameBoardType.size; i++) {
+      for (int j = 0; j < game.gameBoardType.size; j++) {
+        if (game.gameBoard[i][j] != 0) {
+          continue;
+        }
+
+        var gameCopy = TicTacToe.copy(game: game, playerToPlay: TurnOf.player1);
+
+        gameCopy.makeMove(i, j);
+
+        if (gameCopy.isThreeMove()) {
           return [i, j];
         }
       }

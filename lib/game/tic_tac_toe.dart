@@ -172,6 +172,86 @@ class TicTacToe {
     return null;
   }
 
+  bool isThreeMove() {
+    switch (gameBoardType) {
+      case GameBoardType.threeByThree:
+        throw Error();
+      case GameBoardType.fiveByFive:
+        return checkThreeMove();
+      case GameBoardType.sevenBySeven:
+        return checkThreeMove();
+      default:
+        return false;
+    }
+  }
+
+  bool checkThreeMove() {
+    for (int i = 0; i < gameBoardType.size; i++) {
+      for (int j = 0; j < gameBoardType.size; j++) {
+        if (gameBoard[i][j] == 1) {
+          var res = _checkThreeMove(1, 3, i, j);
+
+          if (res != null) {
+            gameWinner = TurnOf.player1;
+            winningSquares = res;
+            return true;
+          }
+        } else if (gameBoard[i][j] == -1) {
+          var res = _checkThreeMove(-1, 3, i, j);
+
+          if (res != null) {
+            gameWinner = TurnOf.player2;
+            winningSquares = res;
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  List<List<int>>? _checkThreeMove(
+      int findValue, int winSize, int row, int column) {
+    for (int i = -1; i < 2; i++) {
+      for (int j = -1; j < 2; j++) {
+        /// Avoid the same square
+        if (i == 0 && j == 0) {
+          continue;
+        }
+
+        var count = 0;
+        bool run = true;
+        var loopRow = row;
+        var loopColumn = column;
+
+        List<List<int>> squares = [
+          [row, column]
+        ];
+
+        while (run) {
+          if (loopRow < gameBoardType.size &&
+              loopRow >= 0 &&
+              loopColumn < gameBoardType.size &&
+              loopColumn >= 0 &&
+              gameBoard[loopRow][loopColumn] == findValue) {
+            squares.add([loopRow, loopColumn]);
+            count++;
+            loopRow += i;
+            loopColumn += j;
+          } else {
+            run = false;
+          }
+        }
+
+        if (count == winSize) {
+          return squares;
+        }
+      }
+    }
+
+    return null;
+  }
+
   int get moves => gameBoard.fold(
       0,
       (previousValue, element) =>

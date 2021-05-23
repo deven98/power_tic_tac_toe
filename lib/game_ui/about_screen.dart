@@ -63,23 +63,12 @@ Use powers to make the game more exciting in 2 player mode or play with a comput
 
 3x3 mode requires 3 in a row to win, 5x5 and 7x7 require 4 in a row.
 
-This app is part of an initiative to make free, open-source, ad-free, educational games. To contribute to our initiative, please go here:
+This app is part of an initiative to make free, open-source, ad-free, educational games.
               ''',
                 style: TextStyle(
                   color: Colors.white,
                 ),
                 textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          Center(
-            child: TextButton(
-              onPressed: () {
-                launch('https://www.buymeacoffee.com/devenjoshi');
-              },
-              child: Text(
-                'Contribute',
-                style: TextStyle(fontSize: 22.0),
               ),
             ),
           ),
